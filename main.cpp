@@ -17,21 +17,14 @@ const long interval = 3000;  // interval at which to blink (milliseconds)
 int ledState = LOW;  // ledState used to set the LED
 //how many clients should be able to telnet to this ESP32
 #define MAX_SRV_CLIENTS 4
-const char* ssid = "XXX";
-const char* password = "XXX";
+const char* ssid = "x";
+const char* password = "x";
 
 WiFiServer server(23);
 WiFiClient serverClients[MAX_SRV_CLIENTS];
 
-void setup() {
-  Serial.begin(115200);
-  Serial.println("\nConnecting");
-  pinMode(LED,OUTPUT);
-  digitalWrite(LED,  LOW);
-  wifiMulti.addAP(ssid, password);
-  wifiMulti.addAP("iot11", "0846996000");
-  
-  Serial.println("Connecting Wifi ");
+void wifisetup(){
+    Serial.println("Connecting Wifi ");
   for (int loops = 10; loops > 0; loops--) {
     if (wifiMulti.run() == WL_CONNECTED) {
       Serial.println("");
@@ -49,7 +42,23 @@ void setup() {
     Serial.println("WiFi connect failed");
     delay(1000);
     ESP.restart();
-  }
+}
+}
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println("\nConnecting");
+  pinMode(LED,OUTPUT);
+  digitalWrite(LED,  LOW);
+  wifiMulti.addAP(ssid, password);
+  //wifiMulti.addAP("x1", "x1");
+  wifisetup();
+
+  // }
+
+
+
+
 
   //start UART and the server
   Serial2.begin(9600);
@@ -91,6 +100,7 @@ ArduinoOTA
   Serial.println(" 23' to connect");
 }
 
+int count;
 void loop() {
   uint8_t i;
 
@@ -110,7 +120,7 @@ void loop() {
   if (wifiMulti.run() == WL_CONNECTED) {
     //check if there are any new clients
  
-
+    count = 0;
     if (server.hasClient()){
       for(i = 0; i < MAX_SRV_CLIENTS; i++){
         //find free/disconnected spot
@@ -166,11 +176,11 @@ void loop() {
   }
   else {
     Serial.println("WiFi not connected!");
-    WiFi.reconnect();
     for(i = 0; i < MAX_SRV_CLIENTS; i++) {
       if (serverClients[i]) serverClients[i].stop();
     }
-    delay(1000);
+    wifisetup();
+    }
+
   }
 
-}
