@@ -1,0 +1,42 @@
+esphome:
+  name: alarmstreamer
+  platform: ESP32
+  board: esp32dev
+
+# Enable logging
+logger:
+  baud_rate: 0
+# Enable Home Assistant API
+api:
+external_components:
+  - source: github://oxan/esphome-stream-server
+uart:
+  id: uart_bus
+  # add further configuration for the UART here
+  baud_rate: 9600
+  tx_pin: GPIO17
+  rx_pin: GPIO16
+  # tx2 and rx2 UART2 - TX: GPIO16, RX: GPIO17 (Only on ESP32)
+stream_server:
+  uart_id: uart_bus
+  # port: 1234
+ota:
+  password: "90e75057ad65a3ee63f9e71e658231c7"
+
+wifi:
+  ssid: "x"
+  password: "x"
+  reboot_timeout: 15s
+
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Alarmstreamer Fallback Hotspot"
+    password: "x"
+
+captive_portal:
+status_led:
+  pin: GPIO2
+  
+web_server:
+  port: 80  
