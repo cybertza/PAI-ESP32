@@ -23,10 +23,14 @@ stream_server:
 ota:
   password: "90e75057ad65a3ee63f9e71e658231c7"
 
+sensor:
+  - platform: uptime
+    name: Uptime Sensor
+
 wifi:
   ssid: "x"
   password: "x"
-  reboot_timeout: 15s
+  reboot_timeout: 45s
 
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
